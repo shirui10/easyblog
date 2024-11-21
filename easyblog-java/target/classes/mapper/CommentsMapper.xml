@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shirui.mapper.CommentsMapper">
+
+    <select id="findByOwnerId" resultMap="Comments">
+        select * from m_comments_dad where owner_id = #{ownerId}
+    </select>
+
+    <resultMap type="com.shirui.entity.CommentsDad" id="Comments">
+        <result property="id" column="id" />
+        <collection property="listCommentsReply" javaType="ArrayList" ofType="com.shirui.entity.CommentsDad" column="id"
+                    select="getSonComments"></collection>
+    </resultMap>
+
+    <select id="getSonComments" resultType="com.shirui.entity.CommentsSon">
+        select * from m_comments_son where id = #{id}
+    </select>
+
+    <select id="getDadId" resultType="java.lang.String">
+        select from_id from m_comments_dad where id = #{id}
+    </select>
+
+    <select id="getDadName" resultType="java.lang.String">
+        select from_name from m_comments_dad where id = #{id}
+    </select>
+
+    <select id="getDadAvatar" resultType="java.lang.String">
+        select from_avatar from m_comments_dad where id = #{id}
+    </select>
+
+    <insert id="addDadComments" parameterType="com.shirui.entity.CommentsDad" keyProperty="id">
+        <selectKey keyProperty='id' resultType='int' order='AFTER'  >
+            select LAST_INSERT_ID();
+        </selectKey>
+        insert into m_comments_dad (id,comment_id,owner_id,type,from_id,from_name,from_avatar,like_num,content,create_time)
+        values(#{id},#{commentId},#{ownerId},#{type},#{fromId},#{fromName},#{fromAvatar},#{likeNum},#{content},#{createTime})
+    </insert>
+
+    <insert id="addSonComments" parameterType="com.shirui.entity.CommentsSon" keyProperty="id">
+        <selectKey keyProperty='id' resultType='int' order='AFTER'  >
+            select LAST_INSERT_ID();
+        </selectKey>
+        insert into m_comments_son (id,comment_id,from_id,from_name,from_avatar,to_id,to_name,to_avatar,content,create_time,like_num)
+        values(#{id},#{commentId},#{fromId},#{fromName},#{fromAvatar},#{toId},#{toName},#{toAvatar},#{content},#{createTime},#{likeNum})
+    </insert>
+</mapper>

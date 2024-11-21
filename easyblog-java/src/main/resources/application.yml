@@ -1,0 +1,25 @@
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/vueblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: admin1003..
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+#更改端口号，SpringBoot默认内嵌的web服务器为tomcat，其默认端口号为8080
+server:
+  port: 8099
+shiro-redis:
+  enabled: true
+  redis-manger:
+    host: 127.0.0.1:6379
+shirui:
+  jwt:
+    # 密钥加密
+    secret: 3opK94aCnJIQhFtvlA6fZVSiyqbYwT
+    # token的有效时长：7天，单位为秒
+    expire: 604800
+    header: Authorization
